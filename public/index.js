@@ -6,7 +6,7 @@
 const bars = [{
   'id': 'f944a3ff-591b-4d5b-9b67-c7e08cba9791',
   'name': 'freemousse-bar',
-  'pricePerHour': 50,
+  'pricePerHour': 30,
   'pricePerPerson': 20
 }, {
   'id': '165d65ec-5e3f-488e-b371-d56ee100aa58',
