@@ -32,6 +32,11 @@ function updatePrices(){
     events[i].price=events[i].price*discountPrice(events[i].persons);
   }
 }
+function calculCommission(indexEvent){
+  events[indexEvent].commission.insurance=0.15 *  events[indexEvent].price;
+  events[indexEvent].commission.treasury=events[indexEvent].persons;
+  events[indexEvent].commission.privateaser=(0.30*events[indexEvent].price)-(events[indexEvent].commission.treasury+  events[indexEvent].commission.insurance)
+}
 //list of bats
 //useful for ALL 5 steps
 //could be an array of objects that you fetched from api or database
