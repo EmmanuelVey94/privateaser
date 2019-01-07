@@ -1,4 +1,14 @@
 'use strict';
+function eventIndexById(indexId){
+  var resultat=0;
+  for(var i=0;i<events.length;i++){
+    if(events[i].id===indexId){
+      resultat=i;
+    }
+  }
+  return resultat;
+}
+
 function calculPrice(unBarId,unTime,unPersons){
   var prix = 0;
   for( var i=0;i<bars.length;i++){
@@ -26,18 +36,65 @@ function discountPrice(unPersons){
   }
   return discount;
 }
+function calculCommission(indexEvent){
+  events[indexEvent].commission.insurance=0.15 *  events[indexEvent].price;
+  events[indexEvent].commission.treasury=events[indexEvent].persons;
+  events[indexEvent].commission.privateaser=(0.30*events[indexEvent].price)-(events[indexEvent].commission.treasury+  events[indexEvent].commission.insurance)
+}
+//lis
 function updatePrices(){
   for(var i=0;i<events.length;i++){
     events[i].price=calculPrice(events[i].barId,events[i].time,events[i].persons);
     events[i].price=events[i].price*discountPrice(events[i].persons);
   }
 }
-function calculCommission(indexEvent){
-  events[indexEvent].commission.insurance=0.15 *  events[indexEvent].price;
-  events[indexEvent].commission.treasury=events[indexEvent].persons;
-  events[indexEvent].commission.privateaser=(0.30*events[indexEvent].price)-(events[indexEvent].commission.treasury+  events[indexEvent].commission.insurance)
+function updateCommission(){
+  for(var i=0;i<events.length;i++){
+    calculCommission(i);
+  }
 }
-//list of bats
+function updateDeductible(){
+  for(var i=0;i<events.length;i++){
+    if(events[i].options.deductibleReduction==true){
+      events[i].price=  events[i].price+events[i].persons;
+      events[i].commission.privateaser=events[i].commission.privateaser+events[i].persons;
+    }
+  }
+}
+function updateActors(){
+
+  var eventIndex=0;
+  for(var i=0;i<actors.length;i++){
+
+    eventIndex=eventIndexById(actors[i].eventId);
+    for(var j=0;j<actors[i].payment.length;j++){
+
+      switch (actors[i].payment[j].who) {
+        case 'booker':
+
+        actors[i].payment[j].amount=events[eventIndex].price;
+          break;
+        case 'bar':
+
+        actors[i].payment[j].amount=events[eventIndex].price-(events[eventIndex].commission.insurance+events[eventIndex].commission.treasury+events[eventIndex].commission.privateaser);
+          break;
+        case 'insurance':
+
+        actors[i].payment[j].amount=events[eventIndex].commission.insurance;
+          break;
+        case 'treasury':
+        actors[i].payment[j].amount=events[eventIndex].commission.treasury;
+          break;
+        case 'privateaser':
+        actors[i].payment[j].amount=events[eventIndex].commission.privateaser;
+          break;
+        default:
+         alert("no amount found");
+        break;
+      }
+    }
+  }
+}
 //useful for ALL 5 steps
 //could be an array of objects that you fetched from api or database
 const bars = [{
@@ -181,8 +238,13 @@ const actors = [{
     'amount': 0
   }]
 }];
-
+function update(){
+  updatePrices();
+  updateCommission();
+  updateDeductible();
+  updateActors();
+}
+update();
 console.log(bars);
-updatePrices();
 console.log(events);
 console.log(actors);
