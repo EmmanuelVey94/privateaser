@@ -4,16 +4,32 @@ function calculPrice(unBarId,unTime,unPersons){
   for( var i=0;i<bars.length;i++){
     if(bars[i].id===unBarId){
       prix+=(bars[i].pricePerHour*unTime)+(bars[i].pricePerPerson*unPersons)
-      alert(bars[i].pricePerHour+" "+unTime+" "+bars[i].pricePerPerson+" "+unPersons+" "+prix)
-
     }
   }
 
   return prix;
 }
+function discountPrice(unPersons){
+  var discount =1;
+  if(unPersons>=60){
+    discount=0.5;
+  }
+  else{
+    if(unPersons>=20){
+      discount=0.7;
+    }
+    else{
+      if(unPersons>=10){
+        discount=0.9;
+      }
+    }
+  }
+  return discount;
+}
 function updatePrices(){
   for(var i=0;i<events.length;i++){
-    events[i].price=calculPrice(events[i].barId,events[i].time,events[i].persons)
+    events[i].price=calculPrice(events[i].barId,events[i].time,events[i].persons);
+    events[i].price=events[i].price*discountPrice(events[i].persons);
   }
 }
 //list of bats
