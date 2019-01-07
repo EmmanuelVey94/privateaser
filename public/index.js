@@ -1,5 +1,13 @@
 'use strict';
-
+function calculPrice(unBarId,unTime,unPersons){
+  var prix = 0;
+  for( var i=0;i<bars.length;i++){
+    if(bars[i].id===unBarId){
+      prix+=(bars[i].pricePerHour*unTime)+(bars[i].pricePerPerson*unPersons)
+    }
+  }
+  return prix;
+}
 //list of bats
 //useful for ALL 5 steps
 //could be an array of objects that you fetched from api or database
@@ -19,7 +27,6 @@ const bars = [{
   'pricePerHour': 250,
   'pricePerPerson': 80
 }];
-
 //list of current booking events
 //useful for ALL steps
 //the time is hour
@@ -35,7 +42,7 @@ const events = [{
   'options': {
     'deductibleReduction': false
   },
-  'price': 0,
+  'price': calculPrice(barId,time,persons),
   'commission': {
     'insurance': 0,
     'treasury': 0,
@@ -50,7 +57,7 @@ const events = [{
   'options': {
     'deductibleReduction': true
   },
-  'price': 0,
+  'price':  calculPrice(barId,time,persons),
   'commission': {
     'insurance': 0,
     'treasury': 0,
@@ -65,7 +72,7 @@ const events = [{
   'options': {
     'deductibleReduction': true
   },
-  'price': 0,
+  'price':  calculPrice(barId,time,persons),
   'commission': {
     'insurance': 0,
     'treasury': 0,
