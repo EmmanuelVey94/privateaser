@@ -11,11 +11,13 @@ function eventIndexById(indexId){
 
 function calculPrice(unBarId,unTime,unPersons){
   var prix = 0;
-  for( var i=0;i<bars.length;i++){
+  bar = bars.find(bar => bar.id=unBarId);
+  prix = (bar.pricePerHour*unTime)+(bar.pricePerPerson*unPersons);
+  /*for( var i=0;i<bars.length;i++){
     if(bars[i].id===unBarId){
       prix+=(bars[i].pricePerHour*unTime)+(bars[i].pricePerPerson*unPersons)
     }
-  }
+  }*/
 
   return prix;
 }
